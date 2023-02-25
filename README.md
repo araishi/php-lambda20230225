@@ -18,3 +18,8 @@ php composer.phar install
 cd web;
 php composer.phar install
 ```
+
+```
+// lambda実装、aws cliの設定でシークレットとパスワードの設定が必要
+sls deploy
+```
