@@ -23,19 +23,6 @@ services:
         volumes:
             - .:/var/www/html
 
-    node:
-        build:
-            context: .
-            dockerfile: ./docker/node/Dockerfile
-        ports:
-            - 3000:3000
-        volumes:
-            - .:/var/www/html
-        working_dir: /var/www/html/nuxt
-        tty: true
-        stdin_open: true
-        command: npm run start:pro
-
     mysql:
         build: ./docker/mysql
         command: --default-authentication-plugin=mysql_native_password
