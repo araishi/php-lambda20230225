@@ -1,0 +1,41 @@
+service: app
+
+provider:
+  name: aws
+  region: ap-northeast-1
+  runtime: provided.al2
+  deploymentMethod: direct # fastest deployment method
+
+plugins:
+  - ./vendor/bref/bref
+  - serverless-lift
+  - ./vendor/bref/extra-php-extensions # <----- Add the extra Serverless plugin
+functions:
+  api:
+    handler: web/public/index.php
+    description: ""
+    timeout: 28 # in seconds (API Gateway has a timeout of 29 seconds)
+    layers:
+      # - ${bref:layer.php-82-fpm}
+      - ${bref:layer.php-81-fpm}
+      - ${bref-extra:gd-php-81}
+      - ${bref-extra:imagick-php-81}
+      - ${bref-extra:memcached-php-81}
+      - ${bref-extra.blackfire-php-81}
+    events:
+      - httpApi: "*"
+constructs:
+  website:
+    type: server-side-website
+    assets:
+      "/assets/js/*": web/public/assets/js
+      "/assets/css/*": web/public/assets/css
+      "/favicon.ico": web/public/favicon.ico
+      # add here any file or directory that needs to be served from S3
+
+# Exclude files from deployment
+package:
+  patterns:
+    - "!node_modules/**"
+    - "!tests/**"
+    # - "!vendor/**"
